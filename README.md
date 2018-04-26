@@ -4,6 +4,7 @@ tensorflow version RL
 gym cartpole-v0 is used to check whether correctly the dqn is oparated
 
 ====================================================================
+
 dqn - https://www.nature.com/articles/nature14236
 
 double_dqn - https://arxiv.org/abs/1509.06461
