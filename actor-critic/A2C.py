@@ -51,19 +51,13 @@ class Critic(object):
         self.r = tf.placeholder(tf.float32, None, 'r')
 
         with tf.variable_scope('Critic'):
-            l1 = tf.layers.dense(inputs=self.s, units=20, activation=tf.nn.relu)
-            l2 = tf.layers.dense(inputs=l1, units=20, activation=tf.nn.relu)
-            l3 = tf.layers.dense(inputs=l2, units=20, activation=tf.nn.relu)
-            l4 = tf.layers.dense(inputs=l3, units=20, activation=tf.nn.relu)
-            
-            self.v = tf.layers.dense(
-                inputs=l4,
-                units=1,  # output units
-                activation=None,
-                kernel_initializer=tf.random_normal_initializer(0., .1),  # weights
-                bias_initializer=tf.constant_initializer(0.1),  # biases
-                name='V'
-            )
+            l1 = tf.layers.dense(inputs=self.s, units=20, activation=tf.nn.tanh)
+            l2 = tf.layers.dense(inputs=l1, units=20, activation=tf.nn.tanh)
+            l3 = tf.layers.dense(inputs=l2, units=20, activation=tf.nn.tanh)
+            l4 = tf.layers.dense(inputs=l3, units=20, activation=tf.nn.tanh)
+            W = tf.Variable(tf.random_normal([20, 1]))
+            self.v = tf.matmul(l4, W)
+            #self.v = tf.layers.dense(inputs=l4, units=1, activation=tf.layers.linar, name='V')
 
         with tf.variable_scope('squared_TD_error'):
             GAMMA = 0.99
