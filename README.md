@@ -17,4 +17,4 @@ policy_gradient - https://papers.nips.cc/paper/1713-policy-gradient-methods-for-
 
 actor critic - https://arxiv.org/pdf/1205.4839.pdf
 
-prioritized experience memory - https://arxiv.org/abs/1511.05952(simple model -> only dqn more efficient)
+prioritized experience memory - https://arxiv.org/abs/1511.05952 (simple model -> only dqn more efficient)
