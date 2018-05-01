@@ -36,7 +36,8 @@ def main():
                                     src_scope_name="main")
         sess.run(copy_ops)
 
-        writer = tf.summary.FileWriter('./board/sample_2', sess.graph)  ########
+        #writer = tf.summary.FileWriter('./board/dqn', sess.graph)  ########
+        writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
 
         for episode in range(MAX_EPISODES):
             e = 1. / ((episode / 10) + 1)

@@ -3,6 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8b5aed84-7fe2-40c4-a8ad-504cdcd7520d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/DQN_PER/agent.py" afterPath="$PROJECT_DIR$/DQN_PER/agent.py" />
+      <change beforePath="$PROJECT_DIR$/DQN_PER/comparison.png" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -107,11 +109,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="dqn.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/DQN_PER/dqn.py">
+      <file leaf-file-name="agent.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="237">
-              <caret line="16" column="14" lean-forward="false" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
+            <state relative-caret-position="-227">
+              <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -119,15 +121,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="agent.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-              </folding>
-            </state>
+      <file leaf-file-name="tensorboard_graph.png" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/DQN_PER/tensorboard_graph.png">
+          <provider selected="true" editor-type-id="images">
+            <state />
           </provider>
         </entry>
       </file>
@@ -173,6 +170,7 @@
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn_dqn.py" />
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn.py" />
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn_agent.py" />
+        <option value="$PROJECT_DIR$/DQN_PER/agent.py" />
       </list>
     </option>
   </component>
@@ -370,7 +368,14 @@
       <option name="project" value="LOCAL" />
       <updated>1525160141128</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="add">
+      <created>1525160233647</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1525160233647</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -411,7 +416,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="erase" />
-    <option name="LAST_COMMIT_MESSAGE" value="erase" />
+    <MESSAGE value="add" />
+    <option name="LAST_COMMIT_MESSAGE" value="add" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -420,16 +426,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dqn/dqn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="25" column="52" lean-forward="false" selection-start-line="25" selection-start-column="52" selection-end-line="25" selection-end-column="52" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/ex.py" />
     <entry file="file://$PROJECT_DIR$/double_dqn/double_agent.py">
       <provider selected="true" editor-type-id="text-editor">
@@ -833,10 +829,15 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DQN_PER/tensorboard_graph.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state relative-caret-position="-227">
+          <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
