@@ -16,10 +16,12 @@ class DQN:
     def _build_network(self, h_size=16, l_rate=0.001):
         with tf.variable_scope(self.net_name):
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
-
             net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
             net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
-            self._Qpred = tf.layers.dense(net, self.output_size)
+            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
+            net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
+            W = tf.Variable(tf.random_normal([h_size, self.output_size]))
+            self._Qpred = tf.matmul(net, W)
 
             self._Y = tf.placeholder(tf.float32, shape=[None, self.output_size])
             self._loss = tf.losses.mean_squared_error(self._Y, self._Qpred)

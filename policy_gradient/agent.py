@@ -12,7 +12,12 @@ sess = tf.Session()
 sess.run(tf.global_variables_initializer())
 env = gym.make('CartPole-v0')
 
-for i in range(1000):
+spend_time = tf.placeholder(tf.float32)
+rr = tf.summary.scalar('reward', spend_time)
+merged = tf.summary.merge_all()
+writer = tf.summary.FileWriter('./board/pg_sparse_reward', sess.graph)
+
+for i in range(500):
     xs = np.empty(shape=[0, 4])
     ys = np.empty(shape=[0, 2])
     rewards = np.empty(shape=[0, 1])
@@ -28,13 +33,19 @@ for i in range(1000):
         ys = np.vstack([ys, y])
         state, reward, done, _ = env.step(action)
         score += reward
+        if done:
+            reward = -20
+        else:
+            reward = 0
         rewards = np.vstack([rewards, reward])
-
+        
         if done:
             # Determine standardized rewards
             discounted_rewards = discount_rewards(rewards, 0.99)
             # Normalization
             discounted_rewards = (discounted_rewards - discounted_rewards.mean())/(discounted_rewards.std() + 1e-7)
             _ = sess.run(train, feed_dict={X: xs,Y: ys,advantages: discounted_rewards})
-            print(score, i)
+            summary = sess.run(merged, feed_dict={spend_time: score})
+            writer.add_summary(summary, i)
+            print(i, score)
             break

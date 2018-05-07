@@ -13,7 +13,7 @@ INPUT_SIZE = env.observation_space.shape[0]
 OUTPUT_SIZE = env.action_space.n
 
 
-REPLAY_MEMORY = 50000
+REPLAY_MEMORY = 300
 BATCH_SIZE = 64
 TARGET_UPDATE_FREQUENCY = 5
 MAX_EPISODES = 5000
@@ -27,7 +27,10 @@ def main():
         mainDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="main", mode="mean")
         targetDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="target", mode="mean")
         sess.run(tf.global_variables_initializer())
-
+        spend_time = tf.placeholder(tf.float32)
+        rr = tf.summary.scalar('reward', spend_time)
+        merged = tf.summary.merge_all()
+        writer = tf.summary.FileWriter('./board/dd_dqn', sess.graph)
         # initial copy q_net -> target_net
         copy_ops = get_copy_var_ops(dest_scope_name="target",
                                     src_scope_name="main")
@@ -61,6 +64,9 @@ def main():
 
                 if step_count % TARGET_UPDATE_FREQUENCY == 0:
                     sess.run(copy_ops)
+                if done:
+                    summary = sess.run(merged, feed_dict={spend_time: step_count})
+                    writer.add_summary(summary, episode)
 
                 state = next_state
                 step_count += 1

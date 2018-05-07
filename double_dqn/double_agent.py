@@ -14,9 +14,9 @@ OUTPUT_SIZE = env.action_space.n
 
 
 REPLAY_MEMORY = 50000
-BATCH_SIZE = 64
+BATCH_SIZE = 128
 TARGET_UPDATE_FREQUENCY = 5
-MAX_EPISODES = 5000
+MAX_EPISODES = 200
 
 def main():
     replay_buffer = deque(maxlen=REPLAY_MEMORY)
@@ -25,6 +25,11 @@ def main():
         mainDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="main")
         targetDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="target")
         sess.run(tf.global_variables_initializer())
+
+        spend_time = tf.placeholder(tf.float32)
+        rr = tf.summary.scalar('reward', spend_time)
+        merged = tf.summary.merge_all()
+        writer = tf.summary.FileWriter('./board/double_dqn', sess.graph)
 
         # initial copy q_net -> target_net
         copy_ops = get_copy_var_ops(dest_scope_name="target",
@@ -59,7 +64,9 @@ def main():
 
                 if step_count % TARGET_UPDATE_FREQUENCY == 0:
                     sess.run(copy_ops)
-
+                if done:
+                    summary = sess.run(merged, feed_dict={spend_time: step_count})
+                    writer.add_summary(summary, episode)
                 state = next_state
                 step_count += 1
 

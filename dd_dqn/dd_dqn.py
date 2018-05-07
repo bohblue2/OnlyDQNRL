@@ -14,7 +14,7 @@ class DQN:
 
         self._build_network()
 
-    def _build_network(self, h_size=16, l_rate=0.001):
+    def _build_network(self, h_size=16, l_rate=0.005):
         with tf.variable_scope(self.net_name):
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
 

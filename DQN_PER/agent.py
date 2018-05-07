@@ -14,8 +14,8 @@ INPUT_SIZE = env.observation_space.shape[0]
 OUTPUT_SIZE = env.action_space.n
 
 
-REPLAY_MEMORY = 50000
-BATCH_SIZE = 64
+REPLAY_MEMORY = 500
+BATCH_SIZE = 256
 TARGET_UPDATE_FREQUENCY = 5
 MAX_EPISODES = 1000
 
@@ -64,7 +64,6 @@ def main():
                     if len(replay_buffer) > BATCH_SIZE:
                         #minibatch = random.sample(replay_buffer, BATCH_SIZE)                   # only_DQN
                         minibatch = per_sample(mainDQN, targetDQN, replay_buffer, BATCH_SIZE)   # per_DQN
-                        #print(minibatch)
                         loss, _ = replay_train(mainDQN, targetDQN, minibatch)
                     if step_count % TARGET_UPDATE_FREQUENCY == 0:
                         sess.run(copy_ops)

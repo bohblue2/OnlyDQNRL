@@ -46,9 +46,9 @@ class Critic(object):
         with tf.variable_scope('Critic'):
             l1 = tf.layers.dense(inputs=self.s, units=20, activation=tf.nn.tanh)
             l1 = tf.layers.dense(inputs=l1, units=20, activation=tf.nn.tanh)
-            l1 = tf.layers.dense(inputs=l1, units=20, activation=tf.nn.tanh)
             W = tf.Variable(tf.random_normal([20, 1]))
-            self.v = tf.matmul(l1, W)
+            b = tf.Variable(tf.random_normal([1]))
+            self.v = tf.matmul(l1, W) + b
 
         with tf.variable_scope('squared_TD_error'):
             GAMMA = 0.99
