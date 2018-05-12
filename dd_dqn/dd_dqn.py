@@ -14,14 +14,21 @@ class DQN:
 
         self._build_network()
 
-    def _build_network(self, h_size=16, l_rate=0.005):
+    def _build_network(self, l_rate=0.01):
         with tf.variable_scope(self.net_name):
+            
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
 
-            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
+            net = tf.layers.dense(self._X, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
-            self.advantage = tf.layers.dense(net, self.output_size)
-            self.value = tf.layers.dense(net, 1)
+            ad_net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            ad_net = tf.layers.dense(ad_net, 64, activation=None, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            self.advantage = tf.layers.dense(ad_net, self.output_size, activation=None)
+            
+            v_net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            v_net = tf.layers.dense(v_net, 64, activation=None, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            self.value = tf.layers.dense(v_net, 1, activation=None)
 
             if self.mode == 'default':
                 self._Qpred = tf.add(self.advantage, self.value)
@@ -47,7 +54,7 @@ class DQN:
         }
         return self.session.run([self._loss, self._train], feed)
 
-def replay_train(mainDQN, targetDQN, train_batch):
+def replay_train(mainDQN, targetDQN, train_batch, batch_size):
     DISCOUNT_RATE = 0.99
     states = np.vstack([x[0] for x in train_batch])
     actions = np.array([x[1] for x in train_batch])
@@ -60,7 +67,7 @@ def replay_train(mainDQN, targetDQN, train_batch):
     Q_value_next_state = mainDQN.predict(next_states)
     evaluated_action = np.argmax(Q_value_next_state, axis=1)
     ev_action = []
-    for i in range(64):
+    for i in range(batch_size):
         ev_action.append(targetDQN.predict(next_states)[i][evaluated_action[i]])
     Q_target = rewards + DISCOUNT_RATE * np.array(ev_action) * ~done
 

@@ -3,7 +3,6 @@ import tensorflow as tf
 import random
 from collections import deque
 from dd_dqn import DQN, get_copy_var_ops, replay_train
-
 import gym
 
 env = gym.make('CartPole-v0')
@@ -13,10 +12,10 @@ INPUT_SIZE = env.observation_space.shape[0]
 OUTPUT_SIZE = env.action_space.n
 
 
-REPLAY_MEMORY = 300
-BATCH_SIZE = 64
+REPLAY_MEMORY = 50000
+BATCH_SIZE = 1024
 TARGET_UPDATE_FREQUENCY = 5
-MAX_EPISODES = 5000
+MAX_EPISODES = 300
 
 def main():
     replay_buffer = deque(maxlen=REPLAY_MEMORY)
@@ -58,20 +57,23 @@ def main():
                 # Save the experience to our buffer
                 replay_buffer.append((state, action, reward, next_state, done))
 
-                if len(replay_buffer) > BATCH_SIZE:
-                    minibatch = random.sample(replay_buffer, BATCH_SIZE)
-                    loss, _ = replay_train(mainDQN, targetDQN, minibatch)
-
-                if step_count % TARGET_UPDATE_FREQUENCY == 0:
-                    sess.run(copy_ops)
+                
+                
                 if done:
+                    if len(replay_buffer) > BATCH_SIZE:
+                        minibatch = random.sample(replay_buffer, BATCH_SIZE)
+                        loss, _ = replay_train(mainDQN, targetDQN, minibatch, BATCH_SIZE)
+                        sess.run(copy_ops)
+                    
+                    #if step_count % TARGET_UPDATE_FREQUENCY == 0:
+                    #    sess.run(copy_ops)
                     summary = sess.run(merged, feed_dict={spend_time: step_count})
                     writer.add_summary(summary, episode)
-
                 state = next_state
                 step_count += 1
-
+        
             print("Episode: {}  steps: {}".format(episode, step_count))
+                
 
 
 if __name__ == "__main__":

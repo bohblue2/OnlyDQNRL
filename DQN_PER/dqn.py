@@ -18,7 +18,7 @@ class DQN:
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
             net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
             net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
-            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
+            net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
             net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
             W = tf.Variable(tf.random_normal([h_size, self.output_size]))
             self._Qpred = tf.matmul(net, W)

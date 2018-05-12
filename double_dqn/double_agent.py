@@ -14,9 +14,9 @@ OUTPUT_SIZE = env.action_space.n
 
 
 REPLAY_MEMORY = 50000
-BATCH_SIZE = 128
+BATCH_SIZE = 1024
 TARGET_UPDATE_FREQUENCY = 5
-MAX_EPISODES = 200
+MAX_EPISODES = 300
 
 def main():
     replay_buffer = deque(maxlen=REPLAY_MEMORY)
@@ -58,13 +58,14 @@ def main():
                 # Save the experience to our buffer
                 replay_buffer.append((state, action, reward, next_state, done))
 
-                if len(replay_buffer) > BATCH_SIZE:
-                    minibatch = random.sample(replay_buffer, BATCH_SIZE)
-                    loss, _ = replay_train(mainDQN, targetDQN, minibatch)
-
-                if step_count % TARGET_UPDATE_FREQUENCY == 0:
-                    sess.run(copy_ops)
+                
                 if done:
+                    if len(replay_buffer) > BATCH_SIZE:
+                        minibatch = random.sample(replay_buffer, BATCH_SIZE)
+                        loss, _ = replay_train(mainDQN, targetDQN, minibatch)
+                        sess.run(copy_ops)
+                    #if step_count % TARGET_UPDATE_FREQUENCY == 0:
+                    #    sess.run(copy_ops)
                     summary = sess.run(merged, feed_dict={spend_time: step_count})
                     writer.add_summary(summary, episode)
                 state = next_state

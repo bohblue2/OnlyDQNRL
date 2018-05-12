@@ -2,10 +2,9 @@ import numpy as np
 import tensorflow as tf
 import random
 from collections import deque
-from dqn import DQN, get_copy_var_ops, replay_train
-from per import per_sample
-
+from dd_dqn import DQN, get_copy_var_ops, replay_train
 import gym
+from per import per_sample
 
 env = gym.make('CartPole-v0')
 
@@ -15,38 +14,37 @@ OUTPUT_SIZE = env.action_space.n
 
 
 REPLAY_MEMORY = 50000
-BATCH_SIZE = 256
+BATCH_SIZE = 1024
 TARGET_UPDATE_FREQUENCY = 5
-MAX_EPISODES = 1000
-
-r = tf.placeholder(tf.float32)  ########
-rr = tf.summary.scalar('reward', r)
-merged = tf.summary.merge_all()  ########
+MAX_EPISODES = 300
 
 def main():
     replay_buffer = deque(maxlen=REPLAY_MEMORY)
 
-    with tf.Session() as sess:
-        mainDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="main")
-        targetDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="target")
-        sess.run(tf.global_variables_initializer())
+    last_100_game_reward = deque(maxlen=100)
 
+    with tf.Session() as sess:
+        mainDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="main", mode="mean")
+        targetDQN = DQN(sess, INPUT_SIZE, OUTPUT_SIZE, name="target", mode="mean")
+        sess.run(tf.global_variables_initializer())
+        spend_time = tf.placeholder(tf.float32)
+        rr = tf.summary.scalar('reward', spend_time)
+        merged = tf.summary.merge_all()
+        writer = tf.summary.FileWriter('./board/dd_dqn_per', sess.graph)
         # initial copy q_net -> target_net
         copy_ops = get_copy_var_ops(dest_scope_name="target",
                                     src_scope_name="main")
         sess.run(copy_ops)
-
-        #writer = tf.summary.FileWriter('./board/dqn', sess.graph)  ########
-        writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
 
         for episode in range(MAX_EPISODES):
             e = 1. / ((episode / 10) + 1)
             done = False
             step_count = 0
             state = env.reset()
-
-            while not done:
+            random_rate = 0
+            while not done: 
                 if np.random.rand() < e:
+                    random_rate += 1
                     action = env.action_space.sample()
                 else:
                     # Choose an action by greedily from the Q-network
@@ -60,19 +58,23 @@ def main():
 
                 # Save the experience to our buffer
                 replay_buffer.append((state, action, reward, next_state, done))
-                if len(replay_buffer) > BATCH_SIZE:
-                        #minibatch = random.sample(replay_buffer, BATCH_SIZE)                   # only_DQN
-                        minibatch = per_sample(mainDQN, targetDQN, replay_buffer, BATCH_SIZE)   # per_DQN
-                        loss, _ = replay_train(mainDQN, targetDQN, minibatch)
-                if step_count % TARGET_UPDATE_FREQUENCY == 0:
-                    sess.run(copy_ops)
+                
                 if done:
-                    summary = sess.run(merged, feed_dict={r: step_count})
+                    if len(replay_buffer) > BATCH_SIZE:
+                        #minibatch = random.sample(replay_buffer, BATCH_SIZE)
+                        minibatch = per_sample(mainDQN, targetDQN, replay_buffer, BATCH_SIZE)
+                        loss, _ = replay_train(mainDQN, targetDQN, minibatch, BATCH_SIZE)
+                        sess.run(copy_ops)
+                    
+                    #if step_count % TARGET_UPDATE_FREQUENCY == 0:
+                    #    sess.run(copy_ops)
+                    summary = sess.run(merged, feed_dict={spend_time: step_count})
                     writer.add_summary(summary, episode)
                 state = next_state
                 step_count += 1
-
-            print("Episode: {}  steps: {}".format(episode, step_count))
+        
+            print("Episode: {}  steps: {} random: {}".format(episode, step_count, random_rate/step_count))
+                
 
 
 if __name__ == "__main__":

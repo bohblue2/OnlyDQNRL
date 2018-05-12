@@ -13,11 +13,14 @@ class DQN:
 
         self._build_network()
 
-    def _build_network(self, h_size=16, l_rate=0.001):
+    def _build_network(self, h_size=16, l_rate=0.01):
         with tf.variable_scope(self.net_name):
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
-
-            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
+            
+            net = tf.layers.dense(self._X, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.tanh, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
             self._Qpred = tf.layers.dense(net, self.output_size)
 
             self._Y = tf.placeholder(tf.float32, shape=[None, self.output_size])
@@ -50,7 +53,7 @@ def replay_train(mainDQN, targetDQN, train_batch):
     Q_value_next_state = mainDQN.predict(next_states)
     evaluated_action = np.argmax(Q_value_next_state, axis=1)
     ev_action = []
-    for i in range(128):
+    for i in range(1024):
         ev_action.append(targetDQN.predict(next_states)[i][evaluated_action[i]])
     Q_target = rewards + DISCOUNT_RATE * np.array(ev_action) * ~done
 

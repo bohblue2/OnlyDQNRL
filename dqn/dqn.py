@@ -13,15 +13,14 @@ class DQN:
 
         self._build_network()
 
-    def _build_network(self, h_size=16, l_rate=0.001):
+    def _build_network(self, h_size=16, l_rate=0.01):
         with tf.variable_scope(self.net_name):
             self._X = tf.placeholder(tf.float32, [None, self.input_size], name="input_x")
-            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
-            net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
-            net = tf.layers.dense(self._X, h_size, activation=tf.nn.relu)
-            net = tf.layers.dense(net, h_size, activation=tf.nn.relu)
-            W = tf.Variable(tf.random_normal([h_size, self.output_size]))
-            self._Qpred = tf.matmul(net, W)
+            net = tf.layers.dense(self._X, 64, activation=tf.nn.relu, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.relu, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.relu, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            net = tf.layers.dense(net, 64, activation=tf.nn.relu, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
+            self._Qpred = tf.layers.dense(net, 2, kernel_initializer=tf.truncated_normal_initializer(stddev=0.01))
 
             self._Y = tf.placeholder(tf.float32, shape=[None, self.output_size])
             self._loss = tf.losses.mean_squared_error(self._Y, self._Qpred)
