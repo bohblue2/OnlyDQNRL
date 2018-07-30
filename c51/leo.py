@@ -75,15 +75,13 @@ def train_minibatch(mainC51, targetC51, minibatch):
         r_stack.append(r_r)
         s1_stack.append(s1_r)
         d_stack.append(d_r)
+
     # Categorical Algorithm
     target_sum_q = targetC51.sess.run(targetC51.soft_dist_Q, feed_dict={targetC51.X: np.vstack(s1_stack)})
     # Get optimal action
     sum_q = mainC51.optimal_action(s1_stack)
-    print(sum_q)
     sum_q = sum_q.reshape([len(minibatch), OUTPUT], order='F')
-    print(sum_q)
     optimal_actions = np.argmax(sum_q, axis=1)
-
     for i in range(len(minibatch)):
         if d_stack[i]:
             # Compute the projection of Tz
@@ -104,7 +102,7 @@ def train_minibatch(mainC51, targetC51, minibatch):
                 # Distribute probability Tz
                 m_prob[a_stack[i]][i][int(m_l)] += (m_u - bj) * target_sum_q[optimal_actions[i]][i][j]
                 m_prob[a_stack[i]][i][int(m_u)] += (bj - m_l) * target_sum_q[optimal_actions[i]][i][j]
-
+    print(np.vstack(s_stack).shape)
     mainC51.sess.run(mainC51.train, feed_dict={mainC51.X: np.vstack(s_stack), mainC51.Y: m_prob})
 
 
@@ -140,8 +138,9 @@ class C51Agent:
             # Output Layer
             for i in range(self.output_size):
                 exec('self.dist_Q.append(tf.matmul(l1, w2_%s))' % i)
-
+        print(self.dist_Q)
         self.soft_dist_Q = tf.nn.softmax(self.dist_Q)
+        #self.loss = -tf.reduce_mean(self.Y * tf.log(self.soft_dist_Q))
         self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.Y, logits=self.dist_Q))
         optimizer = tf.train.AdamOptimizer(LEARNING_RATE)
         self.train = optimizer.minimize(self.loss)
@@ -201,7 +200,7 @@ def main():
                     e -= (START_EXPLORATION - FINAL_EXPLORATION) / EXPLORATION
 
                 # 액션 선택
-                action = mainC51.get_action(s, e)
+                action = mainC51.get_action(s, e*0.3)
 
                 # s1 : next frame / r : reward / d : done(terminal) / l : info(lives)
                 s1, r, d, l = env.step(action)
