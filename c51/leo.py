@@ -102,7 +102,6 @@ def train_minibatch(mainC51, targetC51, minibatch):
                 # Distribute probability Tz
                 m_prob[a_stack[i]][i][int(m_l)] += (m_u - bj) * target_sum_q[optimal_actions[i]][i][j]
                 m_prob[a_stack[i]][i][int(m_u)] += (bj - m_l) * target_sum_q[optimal_actions[i]][i][j]
-    print(np.vstack(s_stack).shape)
     mainC51.sess.run(mainC51.train, feed_dict={mainC51.X: np.vstack(s_stack), mainC51.Y: m_prob})
 
 
@@ -138,7 +137,6 @@ class C51Agent:
             # Output Layer
             for i in range(self.output_size):
                 exec('self.dist_Q.append(tf.matmul(l1, w2_%s))' % i)
-        print(self.dist_Q)
         self.soft_dist_Q = tf.nn.softmax(self.dist_Q)
         #self.loss = -tf.reduce_mean(self.Y * tf.log(self.soft_dist_Q))
         self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.Y, logits=self.dist_Q))
