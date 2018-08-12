@@ -1,6 +1,7 @@
 import tensorflow as tf
 import gym
 import matplotlib
+matplotlib.use('TkAgg')
 import numpy as np
 import random
 import matplotlib.pyplot as plt
@@ -12,9 +13,9 @@ class C51:
         self.sess = sess
         self.input_size = 4
         self.action_size = 2
+        self.v_max = 30
         self.v_min = -10
         self.category = 51
-        self.v_max = self.v_min + self.category - 1
         self.minibatch_size = 64
 
         self.delta_z = (self.v_max - self.v_min) / float(self.category - 1)
@@ -38,7 +39,6 @@ class C51:
             self.assign_ops.append(tf.assign(v_old, v))
 
     def train(self, memory):
-        #self.minibatch_size = 5
         minibatch = random.sample(memory, self.minibatch_size)
         state_stack = [mini[0] for mini in minibatch]
         next_state_stack = [mini[1] for mini in minibatch]
@@ -50,18 +50,33 @@ class C51:
         sum_target_dist = [np.dot(target_dist_element, self.z) for target_dist_element in target_dist_batch]
         next_action = np.argmax(sum_target_dist, axis=1)
         target_distribution = [x[next_action[i]] for i, x in enumerate(target_dist_batch)]
-        
-        m_probs = []
-        a = [[1,2,3,4],[4,3,2,1]]
-        b = [-1, 0, 1, 2]
-        Q = np.dot(a, b)
 
-        a = [[1, 2],[3, 2],[33, 1]]
-        print(np.argmax(a, axis=1))
+        target_z = []
 
+        for i, done in enumerate(done_stack):
+            if done:
+                x = np.clip(np.zeros(51) + reward_stack[i], self.v_min, self.v_max)
+            else:
+                x = np.clip(np.array(self.z)*0.99 + reward_stack[i], self.v_min, self.v_max)
+            target_z.append(list(x))
+        m_batch = np.zeros([self.minibatch_size, self.category])
+        for i in range(self.minibatch_size):
+            b = (np.array(target_z[i]) - self.v_min) / self.delta_z
+            u = np.ceil(b)
+            l = np.floor(b)
+            for j in range(self.category):
+                #print(i, self.z[j], target_z[i][j], b[j], u[j], l[j],
+                #      u[j]-b[j], b[j]-l[j], target_distribution[i][j], (u[j]-b[j])*target_distribution[i][j],
+                #      (b[j]-l[j])*target_distribution[i][j])
+                #print('--------------------')
+                #print(j, u[j], l[j], 'l:',(u[j]-b[j])*target_distribution[i][j], 'u:',(b[j]-l[j])*target_distribution[i][j])
+                m_batch[i][int(u[j])] += (b[j]-l[j])*target_distribution[i][j]
+                m_batch[i][int(l[j])] += (b[j]-l[j])*target_distribution[i][j]
+                m_batch[i] = np.clip(m_batch[i], 1e-10, 1.0)
+                m_batch[i] /= sum(m_batch[i])
 
+        self.sess.run(self.train_op, feed_dict={self.X:state_stack, self.action:action_stack, self.Y: m_batch})
 
-        
 
     def _build_network(self, name):
         with tf.variable_scope(name):
@@ -90,7 +105,7 @@ c51 = C51(sess)
 sess.run(tf.global_variables_initializer())
 sess.run(c51.assign_ops)
 
-for episode in range(1000):
+for episode in range(10000):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -106,13 +121,13 @@ for episode in range(1000):
         if done:
             reward = -1
         else:
-            reward = 1
+            reward = 0
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
         if done:
             #c51.train(memory)
             if len(memory) > 100:
-                c51.train(memory)   
+                c51.train(memory)
                 sess.run(c51.assign_ops)
             print(episode, global_step)
