@@ -13,10 +13,10 @@ class C51:
         self.sess = sess
         self.input_size = 4
         self.action_size = 2
-        self.v_max = 30
-        self.v_min = -10
+        self.v_max = 25
+        self.v_min = -25
         self.category = 51
-        self.minibatch_size = 64
+        self.minibatch_size = 32
 
         self.delta_z = (self.v_max - self.v_min) / float(self.category - 1)
         self.z = [self.v_min + i * self.delta_z for i in range(self.category)]
@@ -30,7 +30,9 @@ class C51:
 
         expand_dim_action = tf.expand_dims(self.action, -1)
         Q_s_a = tf.reduce_sum(self.main_network * expand_dim_action, axis=1)
-        self.cross_entropy = tf.reduce_mean(-(self.Y * tf.clip_by_value(tf.log(Q_s_a), 1e-10, 1)))
+
+        self.cross_entropy = -tf.reduce_mean(-(self.Y * tf.clip_by_value(tf.log(Q_s_a), 1e-10, 1)))
+        #self.cross_entropy = -tf.reduce_mean((self.Y * tf.log(Q_s_a)))
         
         self.train_op = tf.train.AdamOptimizer(0.001).minimize(self.cross_entropy)
 
@@ -39,7 +41,6 @@ class C51:
             self.assign_ops.append(tf.assign(v_old, v))
 
     def train(self, memory):
-        self.minibatch_size = len(memory)
         minibatch = random.sample(memory, self.minibatch_size)
         state_stack = [mini[0] for mini in minibatch]
         next_state_stack = [mini[1] for mini in minibatch]
@@ -102,7 +103,12 @@ c51 = C51(sess)
 sess.run(tf.global_variables_initializer())
 sess.run(c51.assign_ops)
 
-for episode in range(100):
+r = tf.placeholder(tf.float32)  ########
+rr = tf.summary.scalar('reward', r)
+merged = tf.summary.merge_all()  ########
+writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
+
+for episode in range(300):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -118,13 +124,15 @@ for episode in range(100):
         if done:
             reward = -1
         else:
-            reward = 1
+            reward = 0
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
+        state = next_state
         if done:
-            #c51.train(memory)
-            if len(memory) > 100:
+            if len(memory) > 1000:
                 c51.train(memory)
                 sess.run(c51.assign_ops)
             print(episode, global_step)
+            summary = sess.run(merged, feed_dict={r: global_step})
+            writer.add_summary(summary, episode)

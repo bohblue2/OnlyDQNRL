@@ -4,7 +4,7 @@
     <list default="true" id="8b5aed84-7fe2-40c4-a8ad-504cdcd7520d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/c51/c51.py" afterPath="$PROJECT_DIR$/c51/c51.py" />
-      <change beforePath="$PROJECT_DIR$/ex.py" afterPath="$PROJECT_DIR$/ex.py" />
+      <change beforePath="$PROJECT_DIR$/c51/leo.py" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -90,8 +90,8 @@
       <file leaf-file-name="agent.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="480">
-              <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
+            <state relative-caret-position="338">
+              <caret line="38" column="76" lean-forward="false" selection-start-line="38" selection-start-column="76" selection-end-line="39" selection-end-column="79" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -102,13 +102,9 @@
       <file leaf-file-name="c51.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/c51/c51.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-              <folding>
-                <element signature="e#3187#3788#0" expanded="false" />
-                <element signature="e#3229#3677#0" expanded="false" />
-                <element signature="e#3830#4047#0" expanded="false" />
-              </folding>
+            <state relative-caret-position="125">
+              <caret line="67" column="93" lean-forward="true" selection-start-line="67" selection-start-column="93" selection-end-line="67" selection-end-column="93" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -177,7 +173,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
     <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
@@ -208,6 +204,11 @@
               <item name="OnlyDQNRL" type="b2602c69:ProjectViewProjectNode" />
               <item name="OnlyDQNRL" type="462c0819:PsiDirectoryNode" />
               <item name="c51" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="OnlyDQNRL" type="b2602c69:ProjectViewProjectNode" />
+              <item name="OnlyDQNRL" type="462c0819:PsiDirectoryNode" />
+              <item name="DQN_PER" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -382,10 +383,9 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07117689" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15715292" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35308343" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -780,16 +780,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="480">
-          <caret line="39" column="55" lean-forward="false" selection-start-line="39" selection-start-column="55" selection-end-line="39" selection-end-column="55" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dd_dqn/dd_dqn_agent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="795">
@@ -818,15 +808,21 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/DQN_PER/agent.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="38" column="76" lean-forward="false" selection-start-line="38" selection-start-column="76" selection-end-line="39" selection-end-column="79" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/c51/c51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
-          <folding>
-            <element signature="e#3187#3788#0" expanded="false" />
-            <element signature="e#3229#3677#0" expanded="false" />
-            <element signature="e#3830#4047#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="125">
+          <caret line="67" column="93" lean-forward="true" selection-start-line="67" selection-start-column="93" selection-end-line="67" selection-end-column="93" />
+          <folding />
         </state>
       </provider>
     </entry>
