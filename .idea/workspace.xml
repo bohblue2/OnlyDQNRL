@@ -4,6 +4,7 @@
     <list default="true" id="8b5aed84-7fe2-40c4-a8ad-504cdcd7520d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/c51/c51.py" afterPath="$PROJECT_DIR$/c51/c51.py" />
+      <change beforePath="$PROJECT_DIR$/ex.py" afterPath="$PROJECT_DIR$/ex.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -22,16 +23,6 @@
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="double_agent.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/double_dqn/double_agent.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="5" lean-forward="false" selection-start-line="4" selection-start-column="5" selection-end-line="4" selection-end-column="5" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -111,11 +102,23 @@
       <file leaf-file-name="c51.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/c51/c51.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="93">
-              <caret line="60" column="36" lean-forward="true" selection-start-line="60" selection-start-column="36" selection-end-line="60" selection-end-column="36" />
+            <state relative-caret-position="195">
+              <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
               <folding>
-                <element signature="e#0#23#0" expanded="true" />
+                <element signature="e#3187#3788#0" expanded="false" />
+                <element signature="e#3229#3677#0" expanded="false" />
+                <element signature="e#3830#4047#0" expanded="false" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ex.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/ex.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="30">
+              <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -163,20 +166,19 @@
         <option value="$PROJECT_DIR$/double_dqn/double_agent.py" />
         <option value="$PROJECT_DIR$/double_dqn/double_dqn.py" />
         <option value="$PROJECT_DIR$/dqn/dqn.py" />
-        <option value="$PROJECT_DIR$/ex.py" />
         <option value="$PROJECT_DIR$/dueling_dqn/dueling_agent.py" />
         <option value="$PROJECT_DIR$/dueling_dqn/dueling_dqn.py" />
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn_dqn.py" />
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn.py" />
         <option value="$PROJECT_DIR$/dd_dqn/dd_dqn_agent.py" />
         <option value="$PROJECT_DIR$/DQN_PER/agent.py" />
+        <option value="$PROJECT_DIR$/ex.py" />
         <option value="$PROJECT_DIR$/c51/c51.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" fullScreen="true">
-    <option name="x" value="722" />
-    <option name="width" value="718" />
+    <option name="width" value="1440" />
     <option name="height" value="900" />
   </component>
   <component name="ProjectView">
@@ -194,7 +196,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
@@ -212,6 +213,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -341,10 +343,10 @@
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.c51" />
-        <item index="1" class="java.lang.String" itemvalue="Python.dd_dqn_agent" />
-        <item index="2" class="java.lang.String" itemvalue="Python.dd_dqn" />
-        <item index="3" class="java.lang.String" itemvalue="Python.dueling_agent" />
-        <item index="4" class="java.lang.String" itemvalue="Python.ex" />
+        <item index="1" class="java.lang.String" itemvalue="Python.ex" />
+        <item index="2" class="java.lang.String" itemvalue="Python.dd_dqn_agent" />
+        <item index="3" class="java.lang.String" itemvalue="Python.dd_dqn" />
+        <item index="4" class="java.lang.String" itemvalue="Python.dueling_agent" />
       </list>
     </recent_temporary>
   </component>
@@ -383,10 +385,10 @@
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22551093" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.07117689" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35308343" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35308343" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -724,7 +726,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/ex.py" />
     <entry file="file://$PROJECT_DIR$/double_dqn/double_agent.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
@@ -809,12 +810,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/ex.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="2" column="19" lean-forward="false" selection-start-line="2" selection-start-column="19" selection-end-line="2" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/c51/c51.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="93">
-          <caret line="60" column="36" lean-forward="true" selection-start-line="60" selection-start-column="36" selection-end-line="60" selection-end-column="36" />
+        <state relative-caret-position="195">
+          <caret line="15" column="23" lean-forward="false" selection-start-line="15" selection-start-column="23" selection-end-line="15" selection-end-column="23" />
           <folding>
-            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#3187#3788#0" expanded="false" />
+            <element signature="e#3229#3677#0" expanded="false" />
+            <element signature="e#3830#4047#0" expanded="false" />
           </folding>
         </state>
       </provider>

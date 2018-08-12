@@ -39,6 +39,7 @@ class C51:
             self.assign_ops.append(tf.assign(v_old, v))
 
     def train(self, memory):
+        self.minibatch_size = len(memory)
         minibatch = random.sample(memory, self.minibatch_size)
         state_stack = [mini[0] for mini in minibatch]
         next_state_stack = [mini[1] for mini in minibatch]
@@ -46,36 +47,32 @@ class C51:
         reward_stack = [mini[3] for mini in minibatch]
         done_stack = [mini[4] for mini in minibatch]
 
-        target_dist_batch = self.sess.run(self.target_network, feed_dict={self.X: next_state_stack})
-        sum_target_dist = [np.dot(target_dist_element, self.z) for target_dist_element in target_dist_batch]
-        next_action = np.argmax(sum_target_dist, axis=1)
-        target_distribution = [x[next_action[i]] for i, x in enumerate(target_dist_batch)]
-
-        target_z = []
-
-        for i, done in enumerate(done_stack):
-            if done:
-                x = np.clip(np.zeros(51) + reward_stack[i], self.v_min, self.v_max)
-            else:
-                x = np.clip(np.array(self.z)*0.99 + reward_stack[i], self.v_min, self.v_max)
-            target_z.append(list(x))
+        Q_batch = self.sess.run(self.target_network, feed_dict={self.X: next_state_stack})
+        z_batch = self.z
         m_batch = np.zeros([self.minibatch_size, self.category])
         for i in range(self.minibatch_size):
-            b = (np.array(target_z[i]) - self.v_min) / self.delta_z
-            u = np.ceil(b)
-            l = np.floor(b)
-            for j in range(self.category):
-                #print(i, self.z[j], target_z[i][j], b[j], u[j], l[j],
-                #      u[j]-b[j], b[j]-l[j], target_distribution[i][j], (u[j]-b[j])*target_distribution[i][j],
-                #      (b[j]-l[j])*target_distribution[i][j])
-                #print('--------------------')
-                #print(j, u[j], l[j], 'l:',(u[j]-b[j])*target_distribution[i][j], 'u:',(b[j]-l[j])*target_distribution[i][j])
-                m_batch[i][int(u[j])] += (b[j]-l[j])*target_distribution[i][j]
-                m_batch[i][int(l[j])] += (b[j]-l[j])*target_distribution[i][j]
-                m_batch[i] = np.clip(m_batch[i], 1e-10, 1.0)
-                m_batch[i] /= sum(m_batch[i])
+            action = np.dot(Q_batch[i], z_batch)
+            action_max = np.argmax(action)
+            if done_stack[i]:
+                Tz = np.clip(reward_stack[i], self.v_min, self.v_max)
+                b = (Tz - self.v_min)/self.delta_z
+                l = np.floor(b)
+                u = np.ceil(b)
+                if u == l:
+                    m_batch[i, int(u)] = 1
+                m_batch[i, int(l)] += (u - b)
+                m_batch[i, int(u)] += (l - b)
+            else:
+                for j in range(self.category):
+                    Tz = np.clip(reward_stack[i] + 0.99 * z_batch[j], self.v_min, self.v_max)
+                    b = (Tz - self.v_min)/self.delta_z
+                    l = np.floor(b)
+                    u = np.ceil(b)
+                    m_batch[i, int(l)] += Q_batch[i, action_max, j] * (u - b)
+                    m_batch[i, int(u)] += Q_batch[i, action_max, j] * (b - l)
+            m_batch[i] = m_batch[i] / np.sum(m_batch[i])
+        self.sess.run(self.train_op, feed_dict={self.X: state_stack, self.action: action_stack, self.Y: m_batch})
 
-        self.sess.run(self.train_op, feed_dict={self.X:state_stack, self.action:action_stack, self.Y: m_batch})
 
 
     def _build_network(self, name):
@@ -105,7 +102,7 @@ c51 = C51(sess)
 sess.run(tf.global_variables_initializer())
 sess.run(c51.assign_ops)
 
-for episode in range(10000):
+for episode in range(100):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -121,7 +118,7 @@ for episode in range(10000):
         if done:
             reward = -1
         else:
-            reward = 0
+            reward = 1
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
