@@ -32,9 +32,8 @@ class C51:
         Q_s_a = tf.reduce_sum(self.main_network * expand_dim_action, axis=1)
 
         self.cross_entropy = -tf.reduce_mean(-(self.Y * tf.clip_by_value(tf.log(Q_s_a), 1e-10, 1)))
-        #self.cross_entropy = -tf.reduce_mean((self.Y * tf.log(Q_s_a)))
         
-        self.train_op = tf.train.AdamOptimizer(0.001).minimize(self.cross_entropy)
+        self.train_op = tf.train.AdamOptimizer(0.0005).minimize(self.cross_entropy)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -78,9 +77,10 @@ class C51:
 
     def _build_network(self, name):
         with tf.variable_scope(name):
-            layer_1 = tf.layers.dense(inputs=self.X, units=64, activation=tf.nn.selu, trainable=True)
-            layer_2 = tf.layers.dense(inputs=layer_1, units=64, activation=tf.nn.selu, trainable=True)
-            layer_3 = tf.layers.dense(inputs=layer_2, units=self.action_size*self.category, activation=tf.nn.selu, trainable=True)
+            layer_1 = tf.layers.dense(inputs=self.X, units=64, activation=None, trainable=True)
+            layer_2 = tf.layers.dense(inputs=layer_1, units=64, activation=tf.nn.tanh, trainable=True)
+            layer_3 = tf.layers.dense(inputs=layer_2, units=self.action_size * self.category, activation=tf.nn.tanh,
+                                      trainable=True)
             reshape = tf.reshape(layer_3, [-1, self.action_size, self.category])
             output = tf.nn.softmax(reshape)
         params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=name)
