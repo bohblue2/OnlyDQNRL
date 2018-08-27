@@ -47,7 +47,7 @@ class QRDQN:
         next_action = np.argmax(np.mean(Q_next_state, axis=2), axis=1)
         Q_next_state_next_action = [Q_next_state[i, action, :] for i, action in enumerate(next_action)]
         T_theta = [np.ones(self.category)*reward if done else reward + 0.99 * Q for reward, Q, done in zip(reward_stack, Q_next_state_next_action, done_stack)]
-g
+
 
     def _build_network(self, name):
         with tf.variable_scope(name):
