@@ -17,4 +17,6 @@ prioritized experience memory - https://arxiv.org/abs/1511.05952 (simple model -
 
 c51 - [A Distributional Perspective on Reinforcement Learning](https://arxiv.org/pdf/1707.06887.pdf)
 
+Quantile Regression DQN - [Distributional Reinforcement Learning with Quantile Regression](https://arxiv.org/pdf/1710.10044.pdf)
+
 tensorboard --logdir=dqn:./DQN_PER/board/dqn/,dqn_per:./DQN_PER/board/dqn_per/
