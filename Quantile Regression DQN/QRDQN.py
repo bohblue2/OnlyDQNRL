@@ -41,7 +41,7 @@ class QRDQN:
         Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
         Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
 
-        self.train_op = tf.train.AdamOptimizer(0.00001, epsilon=0.01 / 32).minimize(Loss)
+        self.train_op = tf.train.AdamOptimizer(0.000005, epsilon=0.01 / 32).minimize(Loss)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -65,8 +65,8 @@ class QRDQN:
 
     def _build_network(self, name):
         with tf.variable_scope(name):
-            layer_1 = tf.layers.dense(inputs=self.X, units=64, activation=tf.nn.tanh, trainable=True)
-            layer_2 = tf.layers.dense(inputs=layer_1, units=64, activation=tf.nn.tanh, trainable=True)
+            layer_1 = tf.layers.dense(inputs=self.X, units=32, activation=tf.tanh, trainable=True)
+            layer_2 = tf.layers.dense(inputs=layer_1, units=32, activation=tf.tanh, trainable=True)
             layer_3 = tf.layers.dense(inputs=layer_2, units=self.action_size * self.category, activation=None,
                                       trainable=True)
 
@@ -78,7 +78,7 @@ class QRDQN:
         Q = self.sess.run(self.main_network, feed_dict={self.X: [obs]})
         Q_s_a = np.mean(Q[0], axis=1)
         action = np.argmax(Q_s_a)
-        return action
+        return action, Q
 
 env = gym.make('CartPole-v0')
 sess = tf.Session()
@@ -103,7 +103,15 @@ for episode in range(10000):
         if np.random.rand() < e:
             action = env.action_space.sample()
         else:
-            action = qrdqn.choose_action(state)
+            action, Q = qrdqn.choose_action(state)
+            #Q = np.sort(Q[0])
+            #Q_action_0 = Q[0]
+            #Q_action_1 = Q[1]
+            #prob = np.linspace(0., 1., num=qrdqn.category)
+            #plt.step(Q_action_0, prob, 'r--', Q_action_1, prob, 'b--')
+            #plt.draw()
+            #plt.pause(0.00001)
+            #plt.clf()
 
         next_state, reward, done, _ = env.step(action)
 
@@ -119,6 +127,6 @@ for episode in range(10000):
             if len(memory) > 1000:
                 sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
-            print(episode, global_step, frame)
+            print(episode, global_step)
             summary = sess.run(merged, feed_dict={r: global_step})
             writer.add_summary(summary, episode)
