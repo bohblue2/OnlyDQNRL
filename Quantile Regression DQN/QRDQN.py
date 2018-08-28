@@ -41,8 +41,7 @@ class QRDQN:
         Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
         Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
 
-        self.train_op = tf.train.AdamOptimizer(0.001).minimize(Loss)
-
+        self.train_op = tf.train.AdamOptimizer(0.000625, epsilon=0.01 / 32).minimize(Loss)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -88,7 +87,12 @@ sess.run(qrdqn.assign_ops)
 memory_size = 500000
 memory = deque(maxlen=memory_size)
 
-for episode in range(10000):
+r = tf.placeholder(tf.float32)  ########
+rr = tf.summary.scalar('reward', r)
+merged = tf.summary.merge_all()  ########
+writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
+
+for episode in range(1000):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -103,9 +107,9 @@ for episode in range(10000):
         next_state, reward, done, _ = env.step(action)
 
         if done:
-            reward = 0
+            reward = -1
         else:
-            reward = 1
+            reward = 0
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
@@ -115,3 +119,5 @@ for episode in range(10000):
                 qrdqn.train(memory)
                 sess.run(qrdqn.assign_ops)
             print(episode, global_step)
+            summary = sess.run(merged, feed_dict={r: global_step})
+            writer.add_summary(summary, episode)
