@@ -41,7 +41,8 @@ class QRDQN:
         Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
         Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
 
-        self.train_op = tf.train.AdamOptimizer(0.000005, epsilon=0.01 / 32).minimize(Loss)
+        #self.train_op = tf.train.AdamOptimizer(0.000025, epsilon=0.01 / 32).minimize(Loss)
+        self.train_op = tf.train.AdamOptimizer(1e-6).minimize(Loss)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -66,7 +67,7 @@ class QRDQN:
     def _build_network(self, name):
         with tf.variable_scope(name):
             layer_1 = tf.layers.dense(inputs=self.X, units=128, activation=tf.tanh, trainable=True)
-            layer_2 = tf.layers.dense(inputs=layer_1, units=128, activation=tf.tanh, trainable=True)
+            layer_2 = tf.layers.dense(inputs=layer_1, units=128, activation=None, trainable=True)
             layer_3 = tf.layers.dense(inputs=layer_2, units=self.action_size * self.category, activation=None,
                                       trainable=True)
 
