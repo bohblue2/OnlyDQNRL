@@ -128,5 +128,5 @@ for episode in range(10000):
                 sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
             print(episode, global_step)
-            summary = sess.run(merged, feed_dict={r: global_step})
-            writer.add_summary(summary, episode)
+            #summary = sess.run(merged, feed_dict={r: global_step})
+            #writer.add_summary(summary, episode)

@@ -4,32 +4,7 @@
     <list default="true" id="8b5aed84-7fe2-40c4-a8ad-504cdcd7520d" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/QRDQN.py" afterPath="$PROJECT_DIR$/Quantile Regression DQN/QRDQN.py" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/0.000625/events.out.tfevents.1535445161.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535445072.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535445861.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535445890.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535445965.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446001.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446025.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446037.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446060.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446170.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446203.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446256.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446317.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446346.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446517.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446536.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446551.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446683.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446747.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446772.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446787.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446860.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446890.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446914.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535446934.chageumgang-ui-MacBook-Pro.local" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/ex.py" afterPath="$PROJECT_DIR$/ex.py" />
+      <change beforePath="$PROJECT_DIR$/Quantile Regression DQN/board/dqn_per/events.out.tfevents.1535449517.chageumgang-ui-MacBook-Pro.local" afterPath="" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -43,8 +18,8 @@
       <file leaf-file-name="QRDQN.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Quantile Regression DQN/QRDQN.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="113" column="13" lean-forward="false" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
+            <state relative-caret-position="425">
+              <caret line="130" column="13" lean-forward="false" selection-start-line="130" selection-start-column="13" selection-end-line="130" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -129,7 +104,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" fullScreen="true">
     <option name="x" value="620" />
     <option name="y" value="23" />
     <option name="width" value="820" />
@@ -342,12 +317,12 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="620" y="23" width="820" height="797" extended-state="0" />
+    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27909887" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.15715292" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35185185" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2986699" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32889965" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -695,8 +670,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Quantile Regression DQN/QRDQN.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="113" column="13" lean-forward="false" selection-start-line="113" selection-start-column="13" selection-end-line="113" selection-end-column="13" />
+        <state relative-caret-position="425">
+          <caret line="130" column="13" lean-forward="false" selection-start-line="130" selection-start-column="13" selection-end-line="130" selection-end-column="13" />
           <folding />
         </state>
       </provider>
