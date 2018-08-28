@@ -17,7 +17,7 @@ class QRDQN:
         self.action_size = 2
         self.category = 51
         self.delta_tau = 1/self.category
-        self.minibatch_size = 32
+        self.minibatch_size = 64
         self.gamma = 0.99
 
         self.X = tf.placeholder(tf.float32, [None, 4])
@@ -65,8 +65,8 @@ class QRDQN:
 
     def _build_network(self, name):
         with tf.variable_scope(name):
-            layer_1 = tf.layers.dense(inputs=self.X, units=32, activation=tf.tanh, trainable=True)
-            layer_2 = tf.layers.dense(inputs=layer_1, units=32, activation=tf.tanh, trainable=True)
+            layer_1 = tf.layers.dense(inputs=self.X, units=128, activation=tf.tanh, trainable=True)
+            layer_2 = tf.layers.dense(inputs=layer_1, units=128, activation=tf.tanh, trainable=True)
             layer_3 = tf.layers.dense(inputs=layer_2, units=self.action_size * self.category, activation=None,
                                       trainable=True)
 
@@ -87,11 +87,6 @@ sess.run(tf.global_variables_initializer())
 sess.run(qrdqn.assign_ops)
 memory_size = 500000
 memory = deque(maxlen=memory_size)
-
-r = tf.placeholder(tf.float32)  ########
-rr = tf.summary.scalar('reward', r)
-merged = tf.summary.merge_all()  ########
-writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
 
 for episode in range(10000):
     e = 1. / ((episode / 10) + 1)
@@ -128,5 +123,3 @@ for episode in range(10000):
                 sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
             print(episode, global_step)
-            #summary = sess.run(merged, feed_dict={r: global_step})
-            #writer.add_summary(summary, episode)
