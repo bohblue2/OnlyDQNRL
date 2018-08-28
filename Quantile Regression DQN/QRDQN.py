@@ -41,7 +41,7 @@ class QRDQN:
         Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
         Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
 
-        self.train_op = tf.train.AdamOptimizer(0.000625, epsilon=0.01 / 32).minimize(Loss)
+        self.train_op = tf.train.AdamOptimizer(0.00001, epsilon=0.01 / 32).minimize(Loss)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -58,7 +58,8 @@ class QRDQN:
         Q_next_state = self.sess.run(self.target_network, feed_dict={self.X: next_state_stack})
         next_action = np.argmax(np.mean(Q_next_state, axis=2), axis=1)
         Q_next_state_next_action = [Q_next_state[i, action, :] for i, action in enumerate(next_action)]
-        T_theta = [np.ones(self.category)*reward if done else reward + 0.99 * Q for reward, Q, done in zip(reward_stack, Q_next_state_next_action, done_stack)]
+        Q_next_state_next_action = np.sort(Q_next_state_next_action)
+        T_theta = [np.ones(self.category)*reward if done else reward + self.gamma * Q for reward, Q, done in zip(reward_stack, Q_next_state_next_action, done_stack)]
 
         self.sess.run(self.train_op, feed_dict={self.X: state_stack, self.action: action_stack, self.Y: T_theta})
 
@@ -92,7 +93,7 @@ rr = tf.summary.scalar('reward', r)
 merged = tf.summary.merge_all()  ########
 writer = tf.summary.FileWriter('./board/dqn_per', sess.graph)  ########
 
-for episode in range(1000):
+for episode in range(10000):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -116,8 +117,8 @@ for episode in range(1000):
         state = next_state
         if done:
             if len(memory) > 1000:
-                qrdqn.train(memory)
                 sess.run(qrdqn.assign_ops)
-            print(episode, global_step)
+                qrdqn.train(memory)
+            print(episode, global_step, frame)
             summary = sess.run(merged, feed_dict={r: global_step})
             writer.add_summary(summary, episode)
