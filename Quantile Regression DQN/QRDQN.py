@@ -15,13 +15,14 @@ class QRDQN:
         self.sess = sess
         self.input_size = 4
         self.action_size = 2
-        self.category = 50
+        self.category = 51
         self.delta_tau = 1/self.category
         self.minibatch_size = 32
         self.gamma = 0.99
 
         self.X = tf.placeholder(tf.float32, [None, 4])
         self.action = tf.placeholder(tf.float32, [None, 2])
+        self.Y = tf.placeholder(tf.float32, [None, self.category])
 
         self.target_network, self.target_params = self._build_network('target')
         self.main_network, self.main_params = self._build_network('main')
@@ -30,12 +31,24 @@ class QRDQN:
         expand_dim_action = tf.expand_dims(self.action, -1)
         theta_s_a = tf.reduce_sum(self.main_network * expand_dim_action, axis=1)
 
+        Huber_loss = tf.losses.huber_loss(self.Y, theta_s_a, reduction=tf.losses.Reduction.NONE)
+        min_tau = 1/(2*self.category)
+        max_tau = (2*(self.category-1)+3)/(2*self.category)
+        tau = tf.reshape(tf.range(min_tau, max_tau, 1/self.category), [1, self.category])
+        inv_tau = 1.0 - tau
+
+        error_loss = self.Y - theta_s_a
+        Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
+        Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
+
+        self.train_op = tf.train.AdamOptimizer(0.001).minimize(Loss)
+
+
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
             self.assign_ops.append(tf.assign(v_old, v))
 
-    def train(self, memory, global_step):
-        self.minibatch_size = global_step
+    def train(self, memory):
         minibatch = random.sample(memory, self.minibatch_size)
         state_stack = [mini[0] for mini in minibatch]
         next_state_stack = [mini[1] for mini in minibatch]
@@ -48,6 +61,7 @@ class QRDQN:
         Q_next_state_next_action = [Q_next_state[i, action, :] for i, action in enumerate(next_action)]
         T_theta = [np.ones(self.category)*reward if done else reward + 0.99 * Q for reward, Q, done in zip(reward_stack, Q_next_state_next_action, done_stack)]
 
+        self.sess.run(self.train_op, feed_dict={self.X: state_stack, self.action: action_stack, self.Y: T_theta})
 
     def _build_network(self, name):
         with tf.variable_scope(name):
@@ -74,7 +88,7 @@ sess.run(qrdqn.assign_ops)
 memory_size = 500000
 memory = deque(maxlen=memory_size)
 
-for episode in range(1):
+for episode in range(10000):
     e = 1. / ((episode / 10) + 1)
     done = False
     state = env.reset()
@@ -97,4 +111,7 @@ for episode in range(1):
         memory.append([state, next_state, action_one_hot, reward, done])
         state = next_state
         if done:
-            qrdqn.train(memory, global_step)
+            if len(memory) > 1000:
+                qrdqn.train(memory)
+                sess.run(qrdqn.assign_ops)
+            print(episode, global_step)
