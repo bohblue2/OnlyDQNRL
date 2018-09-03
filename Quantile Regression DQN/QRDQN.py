@@ -42,7 +42,7 @@ class QRDQN:
         Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis = 1))
 
         #self.train_op = tf.train.AdamOptimizer(0.000025, epsilon=0.01 / 32).minimize(Loss)
-        self.train_op = tf.train.AdamOptimizer(1e-6).minimize(Loss)
+        self.train_op = tf.train.AdamOptimizer(1e-5).minimize(Loss)
 
         self.assign_ops = []
         for v_old, v in zip(self.target_params, self.main_params):
@@ -85,7 +85,7 @@ env = gym.make('CartPole-v0')
 sess = tf.Session()
 qrdqn = QRDQN(sess)
 sess.run(tf.global_variables_initializer())
-sess.run(qrdqn.assign_ops)
+#sess.run(qrdqn.assign_ops)
 memory_size = 500000
 memory = deque(maxlen=memory_size)
 
@@ -121,6 +121,6 @@ for episode in range(10000):
         state = next_state
         if done:
             if len(memory) > 1000:
-                sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
+                sess.run(qrdqn.assign_ops)
             print(episode, global_step)
