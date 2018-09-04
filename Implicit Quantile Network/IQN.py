@@ -22,6 +22,28 @@ class IQN:
         self.main_network, self.main_params, self.main_quantiles = self._build_net('main')
         self.target_network, self.target_params, self.target_quantiles = self._build_net('target')
 
+        expand_dim_action = tf.expand_dims(self.action, -1)
+        theta_s_a = tf.reduce_sum(self.main_network * expand_dim_action, axis=1)
+        quant = tf.reshape(self.main_quantiles, [self.batch_size, self.num_quantiles])
+        sorted_quantiles = tf.contrib.framework.sort(quant, direction='ASCENDING')
+        ze = tf.zeros([self.batch_size, 1])
+        shift_sorted_quantiles = tf.concat([ze, sorted_quantiles], 1)[:,:self.num_quantiles]
+        tau = sorted_quantiles - shift_sorted_quantiles
+        inv_tau = 1.0 - tau
+
+        Huber_loss = tf.losses.huber_loss(self.Y, theta_s_a, reduction=tf.losses.Reduction.NONE)
+
+        error_loss = self.Y - theta_s_a
+        Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
+        Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis=1))
+
+        self.train_op = tf.train.AdamOptimizer(1e-5).minimize(Loss)
+
+
+        self.assign_ops = []
+        for v_old, v in zip(self.target_params, self.main_params):
+            self.assign_ops.append(tf.assign(v_old, v))
+
     def train(self, memory):
         minibatch = random.sample(memory, self.batch_size)
         state_stack = [mini[0] for mini in minibatch]
@@ -30,13 +52,15 @@ class IQN:
         reward_stack = [mini[3] for mini in minibatch]
         done_stack = [mini[4] for mini in minibatch]
 
+        done_stack = [int(i) for i in done_stack]
+
         Q_next_state = self.sess.run(self.target_network, feed_dict={self.state: next_state_stack})
         next_action = np.argmax(np.mean(Q_next_state, axis=2), axis=1)
         Q_next_state_next_action = [Q_next_state[i, action, :] for i, action in enumerate(next_action)]
-        T_theta = [np.ones(self.num_quantiles) * reward if done else reward + self.gamma * Q for reward, Q, done in
-                   zip(reward_stack, Q_next_state_next_action, done_stack)]
-
-        #self.sess.run(self.train_op, feed_dict={self.state: state_stack, self.action: action_stack, self.Y: T_theta})
+        T_theta = [reward + (1-done)*self.gamma*Q for reward, Q, done in zip(reward_stack, Q_next_state_next_action, done_stack)]
+        for i in T_theta:
+            print(i)
+        self.sess.run(self.train_op, feed_dict={self.state: state_stack, self.action: action_stack, self.Y: T_theta})
 
     def _build_net(self, name):
         with tf.variable_scope(name):
@@ -100,17 +124,17 @@ for episode in range(10000):
         next_state, reward, done, _ = env.step(action)
 
         if done:
-            reward = 0
+            reward = -1
         else:
-            reward = 1
+            reward = 0
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
         state = next_state
         if done:
             if len(memory) > 1000:
-                sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
+                sess.run(qrdqn.assign_ops)
             #summary = sess.run(merged, feed_dict={r: global_step})
             #writer.add_summary(summary, episode)
             print(episode, global_step)
