@@ -19,28 +19,8 @@ class IQN:
         self.action = tf.placeholder(tf.float32, [None, self.action_size])
         self.Y = tf.placeholder(tf.float32, [None, self.num_quantiles])
 
-        self.main_network, self.main_params = self._build_net('main')
-        self.target_network, self.target_params = self._build_net('target')
-
-        expand_dim_action = tf.expand_dims(self.action, -1)
-        theta_s_a = tf.reduce_sum(self.main_network * expand_dim_action, axis=1)
-
-        Huber_loss = tf.losses.huber_loss(self.Y, theta_s_a, reduction=tf.losses.Reduction.NONE)
-        min_tau = 1 / (2 * self.num_quantiles)
-        max_tau = (2 * (self.num_quantiles - 1) + 3) / (2 * self.num_quantiles)
-        tau = tf.reshape(tf.range(min_tau, max_tau, 1 / self.num_quantiles), [1, self.num_quantiles])
-        inv_tau = 1.0 - tau
-
-        error_loss = self.Y - theta_s_a
-        Loss = tf.where(tf.less(error_loss, 0.0), inv_tau * Huber_loss, tau * Huber_loss)
-        Loss = tf.reduce_mean(tf.reduce_sum(Loss, axis=1))
-
-        self.train_op = tf.train.AdamOptimizer(0.000025, epsilon=0.01 / 32).minimize(Loss)
-        #self.train_op = tf.train.AdamOptimizer(0.00000001).minimize(Loss)
-
-        self.assign_ops = []
-        for v_old, v in zip(self.target_params, self.main_params):
-            self.assign_ops.append(tf.assign(v_old, v))
+        self.main_network, self.main_params, self.main_quantiles = self._build_net('main')
+        self.target_network, self.target_params, self.target_quantiles = self._build_net('target')
 
     def train(self, memory):
         minibatch = random.sample(memory, self.batch_size)
@@ -53,15 +33,15 @@ class IQN:
         Q_next_state = self.sess.run(self.target_network, feed_dict={self.state: next_state_stack})
         next_action = np.argmax(np.mean(Q_next_state, axis=2), axis=1)
         Q_next_state_next_action = [Q_next_state[i, action, :] for i, action in enumerate(next_action)]
-        Q_next_state_next_action = np.sort(Q_next_state_next_action)
         T_theta = [np.ones(self.num_quantiles) * reward if done else reward + self.gamma * Q for reward, Q, done in
                    zip(reward_stack, Q_next_state_next_action, done_stack)]
 
-        self.sess.run(self.train_op, feed_dict={self.state: state_stack, self.action: action_stack, self.Y: T_theta})
+        #self.sess.run(self.train_op, feed_dict={self.state: state_stack, self.action: action_stack, self.Y: T_theta})
 
     def _build_net(self, name):
         with tf.variable_scope(name):
-            state_net = tf.layers.dense(inputs=self.state, units=32, activation=None)
+            state_net = tf.layers.dense(inputs=self.state, units=64, activation=tf.nn.relu)
+            state_net = tf.layers.dense(inputs=state_net, units=64, activation=tf.nn.relu)
             state_net_size = state_net.get_shape().as_list()[-1]
             state_net_tiled = tf.tile(state_net, [self.num_quantiles, 1])
 
@@ -75,12 +55,13 @@ class IQN:
 
             net = tf.multiply(state_net_tiled, quantile_net)
             net = tf.layers.dense(inputs=net, units=512, activation=tf.nn.relu)
+            net = tf.layers.dense(inputs=net, units=128, activation=tf.nn.relu)
             quantile_values = tf.layers.dense(inputs=net, units=self.action_size, activation=None)
             quantile_values = tf.reshape(quantile_values, [self.batch_size, self.action_size, self.num_quantiles])
 
             params = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES, scope=name)
 
-        return quantile_values, params
+        return quantile_values, params, quantiles
 
     def choose_action(self, obs):
         obs = np.tile(obs, [self.batch_size, 1])
@@ -99,10 +80,10 @@ sess.run(qrdqn.assign_ops)
 memory_size = 500000
 memory = deque(maxlen=memory_size)
 
-r = tf.placeholder(tf.float32)  ########
-rr = tf.summary.scalar('reward', r)
-merged = tf.summary.merge_all()  ########
-writer = tf.summary.FileWriter('/Users/chageumgang/Desktop/OnlyDQNRL/Implicit Quantile Network/board/IQN', sess.graph)  ########
+#r = tf.placeholder(tf.float32)  ########
+#rr = tf.summary.scalar('reward', r)
+#merged = tf.summary.merge_all()  ########
+#writer = tf.summary.FileWriter('/Users/chageumgang/Desktop/OnlyDQNRL/Implicit Quantile Network/board/IQN', sess.graph)  ########
 
 for episode in range(10000):
     e = 1. / ((episode / 10) + 1)
@@ -119,9 +100,9 @@ for episode in range(10000):
         next_state, reward, done, _ = env.step(action)
 
         if done:
-            reward = -1
-        else:
             reward = 0
+        else:
+            reward = 1
         action_one_hot = np.zeros(2)
         action_one_hot[action] = 1
         memory.append([state, next_state, action_one_hot, reward, done])
@@ -130,6 +111,6 @@ for episode in range(10000):
             if len(memory) > 1000:
                 sess.run(qrdqn.assign_ops)
                 qrdqn.train(memory)
-            summary = sess.run(merged, feed_dict={r: global_step})
-            writer.add_summary(summary, episode)
+            #summary = sess.run(merged, feed_dict={r: global_step})
+            #writer.add_summary(summary, episode)
             print(episode, global_step)
